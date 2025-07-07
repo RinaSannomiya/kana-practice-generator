@@ -5,13 +5,14 @@ import { KanaSelector } from '@/components/KanaSelector'
 import { PracticeSheet } from '@/components/PracticeSheet'
 import { BatchGenerator } from '@/components/BatchGenerator'
 import { KanaEditor } from '@/components/KanaEditor'
+import { ImageUploader } from '@/components/ImageUploader'
 import { useKana } from '@/contexts/KanaContext'
 import { Kana } from '@/types'
 
 export default function Home() {
   const [selectedKana, setSelectedKana] = useState<Kana | null>(null)
   const [showStrokeOrder, setShowStrokeOrder] = useState(true)
-  const [mode, setMode] = useState<'single' | 'batch' | 'edit'>('single')
+  const [mode, setMode] = useState<'single' | 'batch' | 'edit' | 'upload'>('single')
   const { kanaList } = useKana()
 
   const handlePrint = () => {
@@ -59,6 +60,16 @@ export default function Home() {
               >
                 編集
               </button>
+              <button
+                onClick={() => setMode('upload')}
+                className={`px-6 py-2 rounded-md transition-all ${
+                  mode === 'upload'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-transparent text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                画像
+              </button>
             </div>
           </div>
 
@@ -103,10 +114,15 @@ export default function Home() {
               <h2 className="text-xl font-bold mb-4">一括生成</h2>
               <BatchGenerator kanaList={kanaList} />
             </div>
-          ) : (
+          ) : mode === 'edit' ? (
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">用例単語・画像編集</h2>
               <KanaEditor />
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-bold mb-4">画像アップロード</h2>
+              <ImageUploader />
             </div>
           )}
         </div>

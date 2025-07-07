@@ -8,6 +8,32 @@ interface PracticeSheetProps {
   showStrokeOrder?: boolean
 }
 
+const getDefaultEmoji = (kana: Kana): string => {
+  const emojiMap: { [key: string]: string } = {
+    'あ': '🍬', 'い': '🍓', 'う': '🐰', 'え': '✏️', 'お': '🍙',
+    'か': '☂️', 'き': '🦊', 'く': '🚗', 'け': '🧶', 'こ': '🎯',
+    'さ': '🌸', 'し': '🦌', 'す': '🍉', 'せ': '🦗', 'そ': '☁️',
+    'た': '🥁', 'ち': '🦋', 'つ': '🌙', 'て': '✉️', 'と': '🕐',
+    'な': '🍆', 'に': '🌈', 'ぬ': '🧸', 'ね': '🐱', 'の': '🍙',
+    'は': '🌼', 'ひ': '✈️', 'ふ': '🚢', 'へ': '🐍', 'ほ': '⭐',
+    'ま': '🌲', 'み': '🍊', 'む': '🐛', 'め': '👓', 'も': '🍑',
+    'や': '⛰️', 'ゆ': '❄️', 'よ': '🌃',
+    'ら': '🦁', 'り': '🍎', 'る': '🏠', 'れ': '🧊', 'ろ': '🕯️',
+    'わ': '🐊', 'を': '👨', 'ん': '🍊',
+    'ア': '🍦', 'イ': '🐕', 'ウ': '🐄', 'エ': '🦐', 'オ': '👹',
+    'カ': '📷', 'キ': '🦊', 'ク': '🐻', 'ケ': '🍰', 'コ': '☕',
+    'サ': '🐟', 'シ': '🦌', 'ス': '🍉', 'セ': '🦗', 'ソ': '☁️',
+    'タ': '🐙', 'チ': '🦋', 'ツ': '🌙', 'テ': '📺', 'ト': '🍅',
+    'ナ': '🍆', 'ニ': '🌈', 'ヌ': '🧸', 'ネ': '🐱', 'ノ': '📓',
+    'ハ': '🌼', 'ヒ': '✈️', 'フ': '🚢', 'ヘ': '🐍', 'ホ': '⭐',
+    'マ': '🌲', 'ミ': '🍊', 'ム': '🐛', 'メ': '👓', 'モ': '🍑',
+    'ヤ': '⛰️', 'ユ': '❄️', 'ヨ': '🌃',
+    'ラ': '🦁', 'リ': '🍎', 'ル': '💎', 'レ': '🍋', 'ロ': '🤖',
+    'ワ': '🐊', 'ヲ': '👨', 'ン': '🍞'
+  }
+  return emojiMap[kana.character] || '📝'
+}
+
 export const PracticeSheet: React.FC<PracticeSheetProps> = ({ 
   kana, 
   showStrokeOrder = true 
@@ -48,7 +74,7 @@ export const PracticeSheet: React.FC<PracticeSheetProps> = ({
                   className="max-w-full max-h-full object-contain"
                 />
               ) : (
-                <div className="text-8xl">🐥</div>
+                <div className="text-8xl">{getDefaultEmoji(kana)}</div>
               )}
             </div>
             <div className="text-3xl font-bold">{kana.example.word}</div>
