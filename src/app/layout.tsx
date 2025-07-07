@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import { KanaProvider } from '@/contexts/KanaContext'
 
 export const metadata: Metadata = {
   title: 'かな練習プリント生成',
@@ -13,7 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body>
+        <KanaProvider>
+          {children}
+        </KanaProvider>
+      </body>
     </html>
   )
 }

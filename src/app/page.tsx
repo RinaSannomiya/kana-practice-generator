@@ -4,14 +4,15 @@ import React, { useState } from 'react'
 import { KanaSelector } from '@/components/KanaSelector'
 import { PracticeSheet } from '@/components/PracticeSheet'
 import { BatchGenerator } from '@/components/BatchGenerator'
-import { getAllKana } from '@/data/kanaData'
+import { KanaEditor } from '@/components/KanaEditor'
+import { useKana } from '@/contexts/KanaContext'
 import { Kana } from '@/types'
 
 export default function Home() {
   const [selectedKana, setSelectedKana] = useState<Kana | null>(null)
   const [showStrokeOrder, setShowStrokeOrder] = useState(true)
-  const [mode, setMode] = useState<'single' | 'batch'>('single')
-  const kanaList = getAllKana()
+  const [mode, setMode] = useState<'single' | 'batch' | 'edit'>('single')
+  const { kanaList } = useKana()
 
   const handlePrint = () => {
     window.print()
@@ -47,6 +48,16 @@ export default function Home() {
                 }`}
               >
                 一括生成
+              </button>
+              <button
+                onClick={() => setMode('edit')}
+                className={`px-6 py-2 rounded-md transition-all ${
+                  mode === 'edit'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-transparent text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                編集
               </button>
             </div>
           </div>
@@ -87,10 +98,15 @@ export default function Home() {
                 </div>
               )}
             </>
-          ) : (
+          ) : mode === 'batch' ? (
             <div className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-4">一括生成</h2>
               <BatchGenerator kanaList={kanaList} />
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h2 className="text-xl font-bold mb-4">用例単語・画像編集</h2>
+              <KanaEditor />
             </div>
           )}
         </div>
