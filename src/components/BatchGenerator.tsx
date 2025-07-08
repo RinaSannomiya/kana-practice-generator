@@ -18,6 +18,45 @@ export const BatchGenerator: React.FC<BatchGeneratorProps> = ({ kanaList }) => {
   const hiraganaList = kanaList.filter(k => k.type === 'hiragana')
   const katakanaList = kanaList.filter(k => k.type === 'katakana')
   
+  // 五十音順に並び替える関数
+  const arrangeGojuon = (kanaArray: Kana[]) => {
+    const gojuonOrder = [
+      'a', 'ka', 'sa', 'ta', 'na', 'ha', 'ma', 'ya', 'ra', 'wa',
+      'i', 'ki', 'shi', 'chi', 'ni', 'hi', 'mi', 'ri',
+      'u', 'ku', 'su', 'tsu', 'nu', 'fu', 'mu', 'yu', 'ru',
+      'e', 'ke', 'se', 'te', 'ne', 'he', 'me', 're',
+      'o', 'ko', 'so', 'to', 'no', 'ho', 'mo', 'yo', 'ro', 'wo', 'n'
+    ]
+    
+    const result: (Kana | null)[][] = []
+    for (let col = 0; col < 10; col++) {
+      result[col] = []
+      for (let row = 0; row < 5; row++) {
+        result[col][row] = null
+      }
+    }
+    
+    kanaArray.forEach(kana => {
+      const index = gojuonOrder.indexOf(kana.romaji)
+      if (index !== -1) {
+        const col = Math.floor(index / 5)
+        const row = index % 5
+        if (col < 10 && row < 5) {
+          result[col][row] = kana
+        }
+      }
+    })
+    
+    // 特殊な位置の文字
+    const n = kanaArray.find(k => k.romaji === 'n')
+    if (n) result[9][4] = n
+    
+    return result
+  }
+
+  const hiraganaGrid = arrangeGojuon(hiraganaList)
+  const katakanaGrid = arrangeGojuon(katakanaList)
+  
   const toggleKana = (id: string) => {
     const newSet = new Set(selectedKana)
     if (newSet.has(id)) {
@@ -171,22 +210,31 @@ export const BatchGenerator: React.FC<BatchGeneratorProps> = ({ kanaList }) => {
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-10 gap-2">
-          {hiraganaList.map(kana => (
-            <button
-              key={kana.id}
-              onClick={() => toggleKana(kana.id)}
-              className={`
-                p-3 text-2xl border-2 rounded-lg transition-all
-                ${selectedKana.has(kana.id)
-                  ? 'border-blue-500 bg-blue-50' 
-                  : 'border-gray-300 hover:border-gray-400'
-                }
-              `}
-            >
-              {kana.character}
-            </button>
-          ))}
+        <div className="inline-block">
+          <div className="flex flex-row-reverse gap-2">
+            {hiraganaGrid.map((col, colIndex) => (
+              <div key={colIndex} className="flex flex-col gap-2">
+                {col.map((kana, rowIndex) => (
+                  <button
+                    key={`${colIndex}-${rowIndex}`}
+                    onClick={() => kana && toggleKana(kana.id)}
+                    disabled={!kana}
+                    className={`
+                      w-12 h-12 text-2xl border-2 rounded-lg transition-all
+                      ${!kana 
+                        ? 'invisible' 
+                        : selectedKana.has(kana.id)
+                          ? 'border-blue-500 bg-blue-50' 
+                          : 'border-gray-300 hover:border-gray-400'
+                      }
+                    `}
+                  >
+                    {kana?.character || ''}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       
@@ -209,22 +257,31 @@ export const BatchGenerator: React.FC<BatchGeneratorProps> = ({ kanaList }) => {
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-10 gap-2">
-          {katakanaList.map(kana => (
-            <button
-              key={kana.id}
-              onClick={() => toggleKana(kana.id)}
-              className={`
-                p-3 text-2xl border-2 rounded-lg transition-all
-                ${selectedKana.has(kana.id)
-                  ? 'border-blue-500 bg-blue-50' 
-                  : 'border-gray-300 hover:border-gray-400'
-                }
-              `}
-            >
-              {kana.character}
-            </button>
-          ))}
+        <div className="inline-block">
+          <div className="flex flex-row-reverse gap-2">
+            {katakanaGrid.map((col, colIndex) => (
+              <div key={colIndex} className="flex flex-col gap-2">
+                {col.map((kana, rowIndex) => (
+                  <button
+                    key={`${colIndex}-${rowIndex}`}
+                    onClick={() => kana && toggleKana(kana.id)}
+                    disabled={!kana}
+                    className={`
+                      w-12 h-12 text-2xl border-2 rounded-lg transition-all
+                      ${!kana 
+                        ? 'invisible' 
+                        : selectedKana.has(kana.id)
+                          ? 'border-blue-500 bg-blue-50' 
+                          : 'border-gray-300 hover:border-gray-400'
+                      }
+                    `}
+                  >
+                    {kana?.character || ''}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       
