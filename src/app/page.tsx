@@ -128,8 +128,13 @@ export default function Home() {
         </div>
 
         {mode === 'single' && selectedKana && (
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <PracticeSheet kana={selectedKana} showStrokeOrder={showStrokeOrder} />
+          <div className="bg-gray-100 py-8">
+            <div className="max-w-[210mm] mx-auto">
+              <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">A4プレビュー (210mm × 297mm)</h2>
+              <div className="relative overflow-auto bg-gray-200 p-4 rounded-lg" style={{ maxHeight: '80vh' }}>
+                <PracticeSheet kana={selectedKana} showStrokeOrder={showStrokeOrder} />
+              </div>
+            </div>
           </div>
         )}
       </div>

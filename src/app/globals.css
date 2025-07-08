@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* スクリーンでのA4サイズ表示 */
+@media screen {
+  /* 1mm = 3.78px (96dpi) */
+  .w-\[210mm\] {
+    width: 794px;
+  }
+  
+  .h-\[297mm\] {
+    height: 1123px;
+  }
+}
+
 @media print {
   @page {
     size: A4;
@@ -15,5 +27,14 @@
   
   .no-print {
     display: none !important;
+  }
+  
+  /* 印刷時は正確なサイズ */
+  .w-\[210mm\] {
+    width: 210mm !important;
+  }
+  
+  .h-\[297mm\] {
+    height: 297mm !important;
   }
 }
